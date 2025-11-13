@@ -1,0 +1,112 @@
+erfect! I have your bpred.c file. This is the SimpleScalar branch predictor implementation. Here's how to add BHT tracing to it:
+Modify bpred.c to Add BHT Logging
+Step 1: Add Global Tracing Variables (at top of file, after includes)
+
+Add after line ~50 (after #define RAS_BUG_COMPATIBLE comment):
+
+c
+/* ===== BHT TRACING ADDITIONS ===== */
+static FILE *bpred_trace_file = NULL;
+static int bpred_trace_enabled = 0;
+static unsigned long bpred_trace_count = 0;
+
+/* Initialize trace file */
+void bpred_trace_init(const char *filename) {
+    if (filename && strlen(filename) > 0) {
+        bpred_trace_file = fopen(filename, "w");
+        if (bpred_trace_file) {
+            bpred_trace_enabled = 1;
+            fprintf(stderr, "BHT Trace enabled: %s\n", filename);
+        }
+    }
+}
+
+/* Log branch prediction event */
+void bpred_trace_log(md_addr_t pc, int predicted, int actual) {
+    if (!bpred_trace_enabled || !bpred_trace_file) return;
+    
+    fprintf(bpred_trace_file, "%lu PC=0x%08x PRED=%d ACTUAL=%d MATCH=%s\n",
+            bpred_trace_count++, pc, predicted, actual, 
+            (predicted == actual) ? "HIT" : "MISS");
+    
+    /* Flush every 1000 entries for safety */
+    if (bpred_trace_count % 1000 == 0)
+        fflush(bpred_trace_file);
+}
+
+/* Close trace file */
+void bpred_trace_close() {
+    if (bpred_trace_file) {
+        fprintf(stderr, "BHT Trace complete: %lu events logged\n", bpred_trace_count);
+        fclose(bpred_trace_file);
+        bpred_trace_enabled = 0;
+    }
+}
+/* ===== END BHT TRACING ===== */
+
+Step 2: Add Trace Call to bpred_update() Function
+
+Find the bpred_update() function (around line 600) and add logging after the statistics update:
+
+Find this code around line 630-640:
+
+c
+/* have a branch here */
+if (correct)
+    pred->addr_hits++;
+if (!!pred_taken == !!taken)
+    pred->dir_hits++;
+else
+    pred->misses++;
+
+Change it to:
+
+c
+/* have a branch here */
+if (correct)
+    pred->addr_hits++;
+if (!!pred_taken == !!taken) {
+    pred->dir_hits++;
+    /* TRACE: Log correct prediction */
+    bpred_trace_log(baddr, pred_taken, taken);
+}
+else {
+    pred->misses++;
+    /* TRACE: Log misprediction */
+    bpred_trace_log(baddr, pred_taken, taken);
+}
+
+Step 3: Export Tracing Functions in bpred.h
+
+Open bpred.h and add at the end:
+
+c
+/* BHT Tracing functions */
+extern void bpred_trace_init(const char *filename);
+extern void bpred_trace_log(md_addr_t pc, int predicted, int actual);
+extern void bpred_trace_close();
+
+Step 4: Initialize and Close Trace in sim-outorder.c
+
+Find your main simulator file and:
+
+At startup (after bpred is created):
+
+c
+/* In main() after predictor initialization, add: */
+bpred_trace_init("bpred_trace.txt");
+
+At shutdown (before exit):
+
+c
+/* Before program exits, add: */
+bpred_trace_close();
+
+Step 5: Rebuild SimpleScalar
+
+bash
+cd ~/simplescalar
+make clean
+make
+
+

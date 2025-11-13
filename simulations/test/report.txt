@@ -1,0 +1,35 @@
+
+=== LOOP ANALYSIS REPORT ===
+Main function: 0x4001f0 - 0x400360
+Total loops found: 1
+
+Loop #1:
+  Address Range: 0x400240 - 0x400278
+  Loop Size: 8 instructions
+  Live Registers: 5
+  Memory Accesses: 2
+    - Loads: 0
+    - Stores: 2
+  Arithmetic Instructions: 5
+  Branch Instructions: 1
+  Arithmetic Intensity: 1.67
+  === OPTIMAL UNROLL FACTOR: 2 ===
+
+  Constraint Analysis:
+    Register Pressure Limit: 6
+    Memory Bandwidth Limit: 4
+    Instruction Cache Limit: 2
+    Arithmetic Intensity Limit: 8
+    Final (min of above): 2
+
+  Instructions in Loop:
+    0x400240: sll (ARITHMETIC)
+    0x400248: sw (MEMORY)
+    0x400250: sw (MEMORY)
+    0x400258: addiu (ARITHMETIC)
+    0x400260: addiu (ARITHMETIC)
+    0x400268: addiu (ARITHMETIC)
+    0x400270: slt (ARITHMETIC)
+    0x400278: beq (BRANCH)
+
+

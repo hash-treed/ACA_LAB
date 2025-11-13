@@ -1,0 +1,115 @@
+
+=== LOOP ANALYSIS REPORT ===
+Main function: 0x4001f0 - 0x400480
+Total loops found: 2
+[AGGRESSIVE MODE ENABLED]
+Register Multiplier: 4
+Memory Multiplier: 4
+Cache Multiplier: 4
+Max Factor: 32
+
+
+Loop #1:
+  Address Range: 0x400220 - 0x400300
+  Loop Size: 29 instructions
+  Live Registers: 4
+  Memory Accesses: 9
+    - Loads: 6
+    - Stores: 3
+  Arithmetic Instructions: 14
+  Branch Instructions: 3
+  Arithmetic Intensity: 1.40
+  === OPTIMAL UNROLL FACTOR: 4 ===
+
+  Constraint Analysis:
+  Register Pressure Limit: 32 (aggressive: ×4.00)
+  Memory Bandwidth Limit: 4 (aggressive: ×4.00)
+  Instruction Cache Limit: 4 (aggressive: ×4.00)
+  Arithmetic Intensity Limit: 8
+  Final (min of active constraints): 4
+
+  Instructions in Loop:
+    0x400220: lw (MEMORY)
+    0x400228: lui
+    0x400230: ori (ARITHMETIC)
+    0x400238: slt (ARITHMETIC)
+    0x400240: beq (BRANCH)
+    0x400248: j (BRANCH)
+    0x400250: lw (MEMORY)
+    0x400258: addu (ARITHMETIC)
+    0x400260: sll (ARITHMETIC)
+    0x400268: lui
+    0x400270: addiu (ARITHMETIC)
+    0x400278: addu (ARITHMETIC)
+    0x400280: lw (MEMORY)
+    0x400288: sw (MEMORY)
+    0x400290: lw (MEMORY)
+    0x400298: addu (ARITHMETIC)
+    0x4002a0: sll (ARITHMETIC)
+    0x4002a8: lui
+    0x4002b0: addiu (ARITHMETIC)
+    0x4002b8: addu (ARITHMETIC)
+    0x4002c0: lw (MEMORY)
+    0x4002c8: addu (ARITHMETIC)
+    0x4002d0: sll (ARITHMETIC)
+    0x4002d8: sw (MEMORY)
+    0x4002e0: lw (MEMORY)
+    0x4002e8: addiu (ARITHMETIC)
+    0x4002f0: addu (ARITHMETIC)
+    0x4002f8: sw (MEMORY)
+    0x400300: j (BRANCH)
+
+Loop #2:
+  Address Range: 0x400318 - 0x400418
+  Loop Size: 33 instructions
+  Live Registers: 5
+  Memory Accesses: 9
+    - Loads: 7
+    - Stores: 2
+  Arithmetic Instructions: 17
+  Branch Instructions: 3
+  Arithmetic Intensity: 1.70
+  === OPTIMAL UNROLL FACTOR: 4 ===
+
+  Constraint Analysis:
+  Register Pressure Limit: 24 (aggressive: ×4.00)
+  Memory Bandwidth Limit: 4 (aggressive: ×4.00)
+  Instruction Cache Limit: 4 (aggressive: ×4.00)
+  Arithmetic Intensity Limit: 8
+  Final (min of active constraints): 4
+
+  Instructions in Loop:
+    0x400318: lw (MEMORY)
+    0x400320: lui
+    0x400328: ori (ARITHMETIC)
+    0x400330: slt (ARITHMETIC)
+    0x400338: beq (BRANCH)
+    0x400340: j (BRANCH)
+    0x400348: lw (MEMORY)
+    0x400350: addu (ARITHMETIC)
+    0x400358: sll (ARITHMETIC)
+    0x400360: lui
+    0x400368: addiu (ARITHMETIC)
+    0x400370: addu (ARITHMETIC)
+    0x400378: lw (MEMORY)
+    0x400380: addu (ARITHMETIC)
+    0x400388: sll (ARITHMETIC)
+    0x400390: lui
+    0x400398: addiu (ARITHMETIC)
+    0x4003a0: addu (ARITHMETIC)
+    0x4003a8: lw (MEMORY)
+    0x4003b0: addu (ARITHMETIC)
+    0x4003b8: sll (ARITHMETIC)
+    0x4003c0: lui
+    0x4003c8: addiu (ARITHMETIC)
+    0x4003d0: addu (ARITHMETIC)
+    0x4003d8: lw (MEMORY)
+    0x4003e0: lw (MEMORY)
+    0x4003e8: addu (ARITHMETIC)
+    0x4003f0: sw (MEMORY)
+    0x4003f8: lw (MEMORY)
+    0x400400: addiu (ARITHMETIC)
+    0x400408: addu (ARITHMETIC)
+    0x400410: sw (MEMORY)
+    0x400418: j (BRANCH)
+
